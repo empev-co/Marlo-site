@@ -10,5 +10,5 @@
 // what it's allowed to do. Never put your other key ("service_role") anywhere
 // in this website's files — that one bypasses all the safety rules.
 
-const SUPABASE_URL = "PASTE_YOUR_SUPABASE_PROJECT_URL_HERE";
-const SUPABASE_ANON_KEY = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
+const SUPABASE_URL = "https://ggqzkvdibnxvrxpybifk.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_RrKSKe9xk9KokAoWLcIA2w_iStYOTUn";
