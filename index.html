@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marlo — find a clinic that will see you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand"><span class="mark">Marlo</span></div>
+    </div>
+
+    <div id="loadError" class="banner" style="display:none;">
+      <span style="font-size:1.1rem">⚠️</span>
+      <div>
+        <strong>Can't reach the clinic list right now.</strong>
+        <p>Check your internet connection and reload the page. If this keeps happening, the site's Supabase connection may need to be checked (see config.js).</p>
+      </div>
+    </div>
+
+    <div id="app"></div>
+
+    <footer>
+      Marlo helps you find nearby San Francisco clinics based on your situation — no insurance or immigration paperwork required just to search.
+      <br><a href="admin.html">Clinic staff login</a>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="config.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
