@@ -8,14 +8,13 @@
       bannerNote: "",
       heroPre: "Find a clinic that will ", heroEm: "actually", heroPost: " see you.",
       startBtn: "Get Started",
-      trustLine: "Free – No account needed – Private",
       step1Title: "Tell us about the person who needs care", step1Sub: "This can be you, or someone you're helping.",
       nameLabel: "Name", namePh: "Full name",
       phoneLabel: "Phone number", phonePh: "(415) 555-0100",
       phoneHint: "So we can follow up and see how it went — never shared with clinics without your OK.",
       ageLabel: "Patient's age", agePh: "Insert here", zipLabel: "Patient's zip code", zipPh: "Insert here",
       insLabel: "Patient's insurance status", insPh: "Select one",
-      ins: ["Uninsured / no insurance", "Medi-Cal", "Medicare", "Private insurance / Covered CA", "Not sure"],
+      ins: ["Uninsured / no coverage", "Medicaid (called Medi-Cal in California)", "Medicare", "Private insurance or marketplace plan", "Not sure / other"],
       backBtn: "← Back", getClinicsBtn: "Continue",
       step2Title: "One quick step", step2Sub: "We just need to confirm you're a real person — this keeps Marlo working well for everyone searching.",
       tsIdle: "I'm not a robot", tsChecking: "Checking", tsVerified: "Verified — you're all set", tsFailed: "Couldn't verify — please try again",
@@ -29,7 +28,7 @@
       whichLanguage: "Which language?",
       callBtn: "Call clinic", websiteBtn: "Visit website", startOverBtn: "Start a new search",
       noMatches: "No clinics fit those specifics yet. As Marlo adds more clinics, check back — or call 211 for immediate help finding care.",
-      footer: "Marlo helps you find nearby San Francisco clinics based on your situation — no insurance or immigration paperwork required just to search.",
+      footer: "Answer a few quick questions and get matched to clinics that fit your situation.",
       footerLink: "Clinic staff login",
       langNames: { English: "English", Spanish: "Spanish", Cantonese: "Cantonese", Mandarin: "Mandarin", Vietnamese: "Vietnamese", Tagalog: "Tagalog", Russian: "Russian" },
       filtersSub: "Turn on what matters to you — your matches update instantly.",
@@ -49,14 +48,13 @@
       bannerNote: "",
       heroPre: "Encuentra una clínica que ", heroEm: "de verdad", heroPost: " te atienda.",
       startBtn: "Comenzar",
-      trustLine: "Gratis – Sin necesidad de cuenta – Privado",
       step1Title: "Cuéntenos sobre la persona que necesita atención", step1Sub: "Puede ser usted, o alguien a quien está ayudando.",
       nameLabel: "Nombre", namePh: "Nombre completo",
       phoneLabel: "Número de teléfono", phonePh: "(415) 555-0100",
       phoneHint: "Para poder darle seguimiento y saber cómo le fue — nunca se comparte con las clínicas sin su permiso.",
       ageLabel: "Edad del paciente", agePh: "Escriba aquí", zipLabel: "Código postal del paciente", zipPh: "Escriba aquí",
       insLabel: "Estado del seguro médico", insPh: "Seleccione uno",
-      ins: ["Sin seguro médico", "Medi-Cal", "Medicare", "Seguro privado / Covered CA", "No estoy seguro/a"],
+      ins: ["Sin seguro médico", "Medicaid (llamado Medi-Cal en California)", "Medicare", "Seguro privado o plan del mercado", "No estoy seguro/a / otro"],
       backBtn: "← Atrás", getClinicsBtn: "Continuar",
       step2Title: "Un paso rápido", step2Sub: "Solo necesitamos confirmar que es una persona real — esto ayuda a que Marlo funcione bien para todos.",
       tsIdle: "No soy un robot", tsChecking: "Verificando", tsVerified: "Verificado — todo listo", tsFailed: "No se pudo verificar — intente de nuevo",
@@ -70,7 +68,7 @@
       whichLanguage: "¿Qué idioma?",
       callBtn: "Llamar a la clínica", websiteBtn: "Visitar sitio web", startOverBtn: "Comenzar una nueva búsqueda",
       noMatches: "Ninguna clínica coincide con esos detalles todavía. Llame al 211 para ayuda inmediata.",
-      footer: "Marlo le ayuda a encontrar clínicas cercanas en San Francisco según su situación — no necesita seguro médico ni papeles de inmigración solo para buscar.",
+      footer: "Responda algunas preguntas rápidas y le mostraremos clínicas que se ajusten a su situación.",
       footerLink: "Acceso para personal de clínicas",
       langNames: { English: "inglés", Spanish: "español", Cantonese: "cantonés", Mandarin: "mandarín", Vietnamese: "vietnamita", Tagalog: "tagalo", Russian: "ruso" },
       filtersSub: "Active lo que le importa — sus resultados se actualizan al instante.",
@@ -191,7 +189,6 @@
         '<div class="mark-big">Marlo</div>' +
         '<h1>' + t("heroPre") + '<em>' + t("heroEm") + '</em>' + t("heroPost") + '</h1>' +
         '<button class="btn btn-primary" id="startBtn">' + t("startBtn") + '</button>' +
-        '<div class="trust-line">' + t("trustLine") + '</div>' +
       '</div>';
   }
 
