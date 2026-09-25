@@ -12,3 +12,10 @@
 
 const SUPABASE_URL = "https://ggqzkvdibnxvrxpybifk.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_RrKSKe9xk9KokAoWLcIA2w_iStYOTUn";
+
+// Cloudflare Turnstile (bot check on the "one quick step" screen).
+// This is the public "Site Key" from your Turnstile widget — safe to publish.
+// Cloudflare dashboard -> Turnstile -> your widget -> Site Key.
+// Leave the placeholder in place and the bot-check step will just show an
+// explanatory message instead of breaking the page.
+const TURNSTILE_SITE_KEY = "REPLACE_WITH_YOUR_TURNSTILE_SITE_KEY";

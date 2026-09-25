@@ -10,28 +10,30 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="wrap">
+  <div class="wrap" id="wrap">
     <div class="topbar">
       <div class="brand"><span class="mark">Marlo</span></div>
+      <div class="lang-toggle" id="langToggle">
+        <button data-lang="en">EN</button>
+        <button data-lang="es">ES</button>
+      </div>
     </div>
 
-    <div id="loadError" class="banner" style="display:none;">
+    <div id="loadError" class="banner error-banner" style="display:none;">
       <span style="font-size:1.1rem">⚠️</span>
       <div>
-        <strong>Can't reach the clinic list right now.</strong>
-        <p>Check your internet connection and reload the page. If this keeps happening, the site's Supabase connection may need to be checked (see config.js).</p>
+        <strong id="loadErrorTitle">Can't reach the clinic list right now.</strong>
+        <p id="loadErrorBody">Check your internet connection and reload the page.</p>
       </div>
     </div>
 
     <div id="app"></div>
 
-    <footer>
-      Marlo helps you find nearby San Francisco clinics based on your situation — no insurance or immigration paperwork required just to search.
-      <br><a href="admin.html">Clinic staff login</a>
-    </footer>
+    <footer id="footerText"></footer>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script src="config.js"></script>
   <script src="main.js"></script>
 </body>

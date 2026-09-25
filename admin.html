@@ -10,12 +10,13 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="wrap">
+  <div class="wrap" style="max-width:820px;">
     <div class="topbar">
       <div class="brand"><a class="mark" href="index.html">Marlo</a><span style="color:var(--ink-soft);font-size:0.85rem;margin-left:6px;">clinic admin</span></div>
       <button class="btn-text" id="signOutBtn" style="display:none;">Sign out</button>
     </div>
     <div id="app"></div>
+    <p class="diag-line" id="diagLine"></p>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>

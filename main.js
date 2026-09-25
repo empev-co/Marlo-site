@@ -3,8 +3,92 @@
 (function () {
   "use strict";
 
+  var STR = {
+    en: {
+      bannerNote: "",
+      heroPre: "Find a clinic that will ", heroEm: "actually", heroPost: " see you.",
+      startBtn: "Get Started",
+      trustLine: "Free – No account needed – Private",
+      step1Title: "Tell us about the person who needs care", step1Sub: "This can be you, or someone you're helping.",
+      nameLabel: "Name", namePh: "Full name",
+      phoneLabel: "Phone number", phonePh: "(415) 555-0100",
+      phoneHint: "So we can follow up and see how it went — never shared with clinics without your OK.",
+      ageLabel: "Patient's age", agePh: "Insert here", zipLabel: "Patient's zip code", zipPh: "Insert here",
+      insLabel: "Patient's insurance status", insPh: "Select one",
+      ins: ["Uninsured / no insurance", "Medi-Cal", "Medicare", "Private insurance / Covered CA", "Not sure"],
+      backBtn: "← Back", getClinicsBtn: "Continue",
+      step2Title: "One quick step", step2Sub: "We just need to confirm you're a real person — this keeps Marlo working well for everyone searching.",
+      tsIdle: "I'm not a robot", tsChecking: "Checking", tsVerified: "Verified — you're all set", tsFailed: "Couldn't verify — please try again",
+      tsNote: "Nothing from this check is stored.",
+      tsSetupNote: "Bot check isn't fully set up on this site yet — continuing without it for now.",
+      seeMatchesBtn: "See My Matches",
+      resultsTitle: "Your Best Matches", resultsSub: "Near ZIP {zip} — ranked by how well they fit what you told us.",
+      filtersTitle: "Other filters",
+      fInterpreter: "Need interpreter", fTransport: "Need transportation", fWalkIn: "No appointment needed",
+      fHiv: "Need HIV related care", fVeteran: "Veteran status", fUndoc: "Immigration status won't be asked", fLgbtq: "LGBTQ+ affirming",
+      whichLanguage: "Which language?",
+      callBtn: "Call clinic", websiteBtn: "Visit website", startOverBtn: "Start a new search",
+      noMatches: "No clinics fit those specifics yet. As Marlo adds more clinics, check back — or call 211 for immediate help finding care.",
+      footer: "Marlo helps you find nearby San Francisco clinics based on your situation — no insurance or immigration paperwork required just to search.",
+      footerLink: "Clinic staff login",
+      langNames: { English: "English", Spanish: "Spanish", Cantonese: "Cantonese", Mandarin: "Mandarin", Vietnamese: "Vietnamese", Tagalog: "Tagalog", Russian: "Russian" },
+      filtersSub: "Turn on what matters to you — your matches update instantly.",
+      activeCount: "{n} on",
+      groupAccess: "Getting there", groupCare: "Type of care",
+      detailsMore: "See documents & services", detailsLess: "Hide details",
+      docsLabel: "What to bring", servicesLabel: "Care provided",
+      teaserBody: "We recommend adding this info too, for better matches.",
+      teaserBtn: "Add details",
+      teaserSummary: "{n} added — tap to fine-tune your matches",
+      filtersDone: "Done",
+      loadErrorTitle: "Can't reach the clinic list right now.",
+      loadErrorBody: "Check your internet connection and reload the page.",
+      strong: "Strong match", good: "Good match", possible: "Possible option"
+    },
+    es: {
+      bannerNote: "",
+      heroPre: "Encuentra una clínica que ", heroEm: "de verdad", heroPost: " te atienda.",
+      startBtn: "Comenzar",
+      trustLine: "Gratis – Sin necesidad de cuenta – Privado",
+      step1Title: "Cuéntenos sobre la persona que necesita atención", step1Sub: "Puede ser usted, o alguien a quien está ayudando.",
+      nameLabel: "Nombre", namePh: "Nombre completo",
+      phoneLabel: "Número de teléfono", phonePh: "(415) 555-0100",
+      phoneHint: "Para poder darle seguimiento y saber cómo le fue — nunca se comparte con las clínicas sin su permiso.",
+      ageLabel: "Edad del paciente", agePh: "Escriba aquí", zipLabel: "Código postal del paciente", zipPh: "Escriba aquí",
+      insLabel: "Estado del seguro médico", insPh: "Seleccione uno",
+      ins: ["Sin seguro médico", "Medi-Cal", "Medicare", "Seguro privado / Covered CA", "No estoy seguro/a"],
+      backBtn: "← Atrás", getClinicsBtn: "Continuar",
+      step2Title: "Un paso rápido", step2Sub: "Solo necesitamos confirmar que es una persona real — esto ayuda a que Marlo funcione bien para todos.",
+      tsIdle: "No soy un robot", tsChecking: "Verificando", tsVerified: "Verificado — todo listo", tsFailed: "No se pudo verificar — intente de nuevo",
+      tsNote: "No se guarda nada de esta verificación.",
+      tsSetupNote: "La verificación aún no está completamente configurada — continuando sin ella por ahora.",
+      seeMatchesBtn: "Ver Mis Resultados",
+      resultsTitle: "Sus Mejores Opciones", resultsSub: "Cerca del código postal {zip} — clasificadas según qué tan bien coinciden.",
+      filtersTitle: "Otros filtros",
+      fInterpreter: "Necesito intérprete", fTransport: "Necesito transporte", fWalkIn: "Sin necesidad de cita",
+      fHiv: "Necesito atención relacionada con el VIH", fVeteran: "Estatus de veterano", fUndoc: "No preguntarán estatus migratorio", fLgbtq: "Afirmativo LGBTQ+",
+      whichLanguage: "¿Qué idioma?",
+      callBtn: "Llamar a la clínica", websiteBtn: "Visitar sitio web", startOverBtn: "Comenzar una nueva búsqueda",
+      noMatches: "Ninguna clínica coincide con esos detalles todavía. Llame al 211 para ayuda inmediata.",
+      footer: "Marlo le ayuda a encontrar clínicas cercanas en San Francisco según su situación — no necesita seguro médico ni papeles de inmigración solo para buscar.",
+      footerLink: "Acceso para personal de clínicas",
+      langNames: { English: "inglés", Spanish: "español", Cantonese: "cantonés", Mandarin: "mandarín", Vietnamese: "vietnamita", Tagalog: "tagalo", Russian: "ruso" },
+      filtersSub: "Active lo que le importa — sus resultados se actualizan al instante.",
+      activeCount: "{n} activos",
+      groupAccess: "Cómo llegar", groupCare: "Tipo de atención",
+      detailsMore: "Ver documentos y servicios", detailsLess: "Ocultar detalles",
+      docsLabel: "Qué llevar", servicesLabel: "Atención brindada",
+      teaserBody: "Recomendamos agregar esta información también, para mejores resultados.",
+      teaserBtn: "Agregar detalles",
+      teaserSummary: "{n} agregados — toque para ajustar sus resultados",
+      filtersDone: "Listo",
+      loadErrorTitle: "No podemos acceder a la lista de clínicas en este momento.",
+      loadErrorBody: "Revise su conexión a internet y recargue la página.",
+      strong: "Coincidencia alta", good: "Buena opción", possible: "Opción posible"
+    }
+  };
+
   var LANGUAGES = ["English", "Spanish", "Cantonese", "Mandarin", "Vietnamese", "Tagalog", "Russian"];
-  var INSURANCE = ["Uninsured / no insurance", "Medi-Cal", "Medicare", "Private insurance / Covered CA", "Not sure"];
 
   var supabase = null;
   try {
@@ -14,208 +98,306 @@
   }
 
   var state = {
-    step: "loading", // loading | landing | step1 | step2 | results | loaderror
+    lang: "en",
+    step: "loading", // loading | landing | step1 | step2 | results
     clinics: [],
-    patient: {
-      name: "", phone: "", age: "", zip: "", language: "English", insurance: "Uninsured / no insurance",
-      hasCar: null, needsWalkIn: null, undocumented: false, lgbtq: false
-    },
-    lastMatches: []
+    patient: { name: "", phone: "", age: "", insuranceIdx: -1, zip: "" },
+    ts: "idle", // idle | checking | verified | failed
+    tsToken: null,
+    filters: { interpreter: false, language: "Spanish", transport: false, walkIn: false, hiv: false, veteran: false, undoc: false, lgbtq: false },
+    filtersOpen: false,
+    matches: []
   };
 
-  function scoreClinic(clinic, p) {
-    if (clinic.population === "pediatric" && Number(p.age) >= 18) return null;
-    if (clinic.population === "adult" && p.age !== "" && Number(p.age) < 18) return null;
+  function t(key) { return STR[state.lang][key]; }
 
-    var score = 0;
-    var reasons = [];
-    var insurance = clinic.insurance || [];
-    var languages = clinic.languages || [];
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
 
-    if (insurance.indexOf(p.insurance) !== -1) {
+  function toggleRow(name, value, label, checked) {
+    return '' +
+      '<div class="toggle-row">' +
+        '<span class="toggle-label">' + label + '</span>' +
+        '<label class="switch">' +
+          '<input type="checkbox" name="' + name + '" value="' + value + '" ' + (checked ? "checked" : "") + '>' +
+          '<span class="track"></span><span class="thumb"></span>' +
+        '</label>' +
+      '</div>';
+  }
+
+  function progressDots(activeIdx) {
+    var out = "";
+    for (var i = 0; i < 3; i++) out += '<div class="dot' + (i <= activeIdx ? " done" : "") + '"></div>';
+    return '<div class="progress">' + out + '</div>';
+  }
+
+  // ---------- Matching ----------
+
+  function scoreClinic(c, p, f) {
+    if (c.population === "pediatric" && p.age !== "" && Number(p.age) >= 18) return null;
+    if (c.population === "adult" && p.age !== "" && Number(p.age) < 18) return null;
+
+    var score = 0, reasons = [];
+    var insurance = c.insurance || [];
+    var languages = c.languages || [];
+    var insLabel = p.insuranceIdx >= 0 ? STR.en.ins[p.insuranceIdx] : ""; // canonical English label stored in DB
+
+    if (insLabel && insurance.indexOf(insLabel) !== -1) {
       score += 3;
-      reasons.push("Accepts " + p.insurance.toLowerCase());
-    } else if (clinic.sliding_scale) {
+      reasons.push(state.lang === "en" ? "Accepts " + insLabel.toLowerCase() : "Acepta " + STR.es.ins[p.insuranceIdx].toLowerCase());
+    } else if (c.sliding_scale) {
       score += 1;
-      reasons.push("Offers sliding-scale fees based on income");
+      reasons.push(state.lang === "en" ? "Offers sliding-scale fees based on income" : "Ofrece tarifas según sus ingresos");
     }
 
-    if (languages.indexOf(p.language) !== -1) {
-      score += 2;
-      reasons.push("Services available in " + p.language);
+    if (f.interpreter) {
+      if (languages.indexOf(f.language) !== -1) { score += 2; reasons.push((state.lang === "en" ? "Interpreter available: " : "Intérprete disponible: ") + STR[state.lang].langNames[f.language]); }
+    } else if (languages.indexOf("English") === -1 && languages.length) {
+      score -= 1;
     }
 
-    if (p.hasCar === false && clinic.near_transit) {
-      score += 2;
-      reasons.push("Near public transit");
-    }
+    if (f.transport && c.near_transit) { score += 2; reasons.push(state.lang === "en" ? "Near public transit" : "Cerca del transporte público"); }
+    if (f.walkIn && c.walk_in) { score += 2; reasons.push(state.lang === "en" ? "Accepts walk-ins — no appointment needed" : "Acepta pacientes sin cita previa"); }
+    if (f.hiv && c.hiv_care) { score += 3; reasons.push(state.lang === "en" ? "Offers HIV-related care" : "Ofrece atención relacionada con el VIH"); }
+    if (f.veteran && c.veteran_friendly) { score += 2; reasons.push(state.lang === "en" ? "Experience coordinating veteran care" : "Experiencia con atención para veteranos"); }
+    if (f.undoc && c.serves_undocumented) { score += 3; reasons.push(state.lang === "en" ? "Serves patients regardless of immigration status" : "Atiende a pacientes sin importar su estatus migratorio"); }
+    if (f.lgbtq && c.lgbtq_affirming) { score += 2; reasons.push(state.lang === "en" ? "LGBTQ+ affirming care" : "Atención afirmativa LGBTQ+"); }
 
-    if (p.needsWalkIn === true && clinic.walk_in) {
-      score += 2;
-      reasons.push("Accepts walk-ins — no appointment needed");
-    }
-
-    if (p.undocumented && clinic.serves_undocumented) {
-      score += 3;
-      reasons.push("Serves patients regardless of immigration status");
-    }
-
-    if (p.lgbtq && clinic.lgbtq_affirming) {
-      score += 2;
-      reasons.push("LGBTQ+ affirming care");
-    }
-
-    if (reasons.length === 0) reasons.push("General primary care available in San Francisco");
-
-    return { clinic: clinic, score: score, reasons: reasons };
+    if (reasons.length === 0) reasons.push(state.lang === "en" ? "General primary care available in San Francisco" : "Atención primaria general disponible en San Francisco");
+    return { clinic: c, score: score, reasons: reasons };
   }
 
   function matchClinics() {
-    var p = state.patient;
     var scored = [];
-    state.clinics.forEach(function (c) {
-      var r = scoreClinic(c, p);
-      if (r) scored.push(r);
-    });
+    state.clinics.forEach(function (c) { var r = scoreClinic(c, state.patient, state.filters); if (r) scored.push(r); });
     scored.sort(function (a, b) { return b.score - a.score; });
-    return scored.slice(0, 4);
+    return scored;
   }
 
   function tierFor(score) {
-    if (score >= 6) return { cls: "strong", label: "Strong match" };
-    if (score >= 3) return { cls: "good", label: "Good match" };
-    return { cls: "possible", label: "Possible option" };
+    if (score >= 6) return { cls: "strong", label: t("strong") };
+    if (score >= 3) return { cls: "good", label: t("good") };
+    return { cls: "possible", label: t("possible") };
   }
 
-  function chip(name, value, label, checked, type) {
-    return '<label class="chip"><input type="' + (type || "checkbox") + '" name="' + name + '" value="' +
-      value + '" ' + (checked ? "checked" : "") + '><span>' + label + '</span></label>';
-  }
-
-  function progressHtml(activeIndex) {
-    var dots = "";
-    for (var i = 0; i < 3; i++) dots += '<div class="dot' + (i <= activeIndex ? " done" : "") + '"></div>';
-    return '<div class="progress">' + dots + '</div>';
-  }
+  // ---------- Screens ----------
 
   function renderLanding() {
     return '' +
-      '<div class="card hero">' +
-        '<h1>Find a clinic that will actually see you.</h1>' +
-        '<p class="lead">Answer a few quick questions about your language, insurance, and transportation. We\'ll match you with San Francisco clinics that are set up to help — you don\'t need insurance or immigration paperwork just to search.</p>' +
-        '<div><button class="btn btn-primary" id="startBtn">Start my search →</button></div>' +
-        '<div class="trust-line">' +
-          '<span>Free, no account needed</span>' +
-          '<span>Takes about 2 minutes</span>' +
-          '<span>' + state.clinics.length + ' clinics in San Francisco</span>' +
-        '</div>' +
+      '<div class="hero-flat screen">' +
+        '<div class="mark-big">Marlo</div>' +
+        '<h1>' + t("heroPre") + '<em>' + t("heroEm") + '</em>' + t("heroPost") + '</h1>' +
+        '<button class="btn btn-primary" id="startBtn">' + t("startBtn") + '</button>' +
+        '<div class="trust-line">' + t("trustLine") + '</div>' +
       '</div>';
   }
 
   function renderStep1() {
     var p = state.patient;
+    var insOptions = '<option value="-1" disabled' + (p.insuranceIdx === -1 ? " selected" : "") + '>' + t("insPh") + '</option>' +
+      STR[state.lang].ins.map(function (label, i) { return '<option value="' + i + '"' + (p.insuranceIdx === i ? " selected" : "") + '>' + label + '</option>'; }).join("");
     return '' +
-      '<div class="card">' +
-        progressHtml(0) +
-        '<h2 style="font-size:1.3rem;margin-top:16px;margin-bottom:4px;">A little about you</h2>' +
-        '<p style="margin-bottom:20px;">This is who we\'ll help find care for.</p>' +
+      '<div class="card screen">' +
+        progressDots(0) +
+        '<div class="step-head"><h2>' + t("step1Title") + '</h2><p>' + t("step1Sub") + '</p></div>' +
         '<form id="step1Form">' +
-          '<div class="field"><label for="pName">Name</label><input type="text" id="pName" value="' + p.name + '" placeholder="Full name" required></div>' +
           '<div class="two-col">' +
-            '<div class="field"><label for="pPhone">Phone number</label><input type="tel" id="pPhone" value="' + p.phone + '" placeholder="(415) 555-0100" required></div>' +
-            '<div class="field"><label for="pAge">Age</label><input type="number" id="pAge" min="0" max="120" value="' + p.age + '" placeholder="34" required></div>' +
+            '<div class="field"><label for="pName">' + t("nameLabel") + '</label><input type="text" id="pName" value="' + esc(p.name) + '" placeholder="' + t("namePh") + '" required></div>' +
+            '<div class="field"><label for="pPhone">' + t("phoneLabel") + '</label><input type="tel" id="pPhone" value="' + esc(p.phone) + '" placeholder="' + t("phonePh") + '" required></div>' +
           '</div>' +
-          '<div class="field"><label for="pZip">ZIP code (optional)</label><input type="text" id="pZip" value="' + p.zip + '" placeholder="94110" maxlength="10"></div>' +
-          '<div class="form-actions">' +
-            '<button type="button" class="btn-text" id="backLanding">← Back</button>' +
-            '<button type="submit" class="btn btn-primary">Continue →</button>' +
-          '</div>' +
+          '<p class="hint" style="margin-top:-12px;margin-bottom:20px;">' + t("phoneHint") + '</p>' +
+          '<div class="field"><label for="pAge">' + t("ageLabel") + '</label><input type="number" id="pAge" min="0" max="120" value="' + p.age + '" placeholder="' + t("agePh") + '" required></div>' +
+          '<div class="field"><label for="insSelect">' + t("insLabel") + '</label><select id="insSelect" required>' + insOptions + '</select></div>' +
+          '<div class="field"><label for="pZip">' + t("zipLabel") + '</label><input type="text" id="pZip" maxlength="5" pattern="[0-9]{5}" value="' + esc(p.zip) + '" placeholder="' + t("zipPh") + '" required></div>' +
+          '<div class="form-actions"><button type="button" class="btn-text" id="backLanding">' + t("backBtn") + '</button><button type="submit" class="btn btn-primary">' + t("getClinicsBtn") + '</button></div>' +
         '</form>' +
       '</div>';
   }
 
   function renderStep2() {
-    var p = state.patient;
-    var langOptions = LANGUAGES.map(function (l) { return '<option value="' + l + '"' + (l === p.language ? " selected" : "") + '>' + l + '</option>'; }).join("");
-    var insOptions = INSURANCE.map(function (i) { return '<option value="' + i + '"' + (i === p.insurance ? " selected" : "") + '>' + i + '</option>'; }).join("");
+    var verified = state.ts === "verified", checking = state.ts === "checking", failed = state.ts === "failed";
+    var hasRealTurnstile = typeof TURNSTILE_SITE_KEY === "string" && TURNSTILE_SITE_KEY.indexOf("REPLACE_WITH") !== 0;
+    var statusText = failed ? t("tsFailed") : (checking ? t("tsChecking") : (verified ? t("tsVerified") : t("tsIdle")));
+
+    var checkArea;
+    if (hasRealTurnstile) {
+      checkArea = '<div class="cf-turnstile-wrap" id="turnstileWidget"></div>' +
+        (failed ? '<p class="error-note">' + t("tsFailed") + '</p>' : '');
+    } else {
+      checkArea = '' +
+        '<div class="check-box" id="tsBox" role="button" tabindex="0">' +
+          '<input type="checkbox" id="tsCheckbox" ' + (verified ? "checked" : "") + ' readonly tabindex="-1">' +
+          '<div><div class="status">' + statusText + (checking ? '<span class="spinner"></span>' : "") + '</div><div class="sub">Marlo · automated check</div></div>' +
+        '</div>' +
+        '<div class="verify-note"><span>' + t("tsSetupNote") + '</span></div>';
+    }
 
     return '' +
-      '<div class="card">' +
-        progressHtml(1) +
-        '<h2 style="font-size:1.3rem;margin-top:16px;margin-bottom:4px;">Your situation</h2>' +
-        '<p style="margin-bottom:20px;">This is what actually determines which clinics can see you.</p>' +
-        '<form id="step2Form">' +
-          '<div class="two-col">' +
-            '<div class="field"><label for="pLang">Preferred language</label><select id="pLang">' + langOptions + '</select></div>' +
-            '<div class="field"><label for="pIns">Insurance</label><select id="pIns">' + insOptions + '</select></div>' +
-          '</div>' +
-          '<div class="field"><label>Do you have a car or reliable ride?</label>' +
-            '<div class="radio-row">' + chip("car", "yes", "Yes", p.hasCar === true, "radio") + chip("car", "no", "No — I need transit access", p.hasCar === false, "radio") + '</div>' +
-          '</div>' +
-          '<div class="field"><label>Do you need to be seen without an appointment?</label>' +
-            '<div class="radio-row">' + chip("walkin", "yes", "Yes, walk-in", p.needsWalkIn === true, "radio") + chip("walkin", "no", "No, scheduling ahead is fine", p.needsWalkIn === false, "radio") + '</div>' +
-          '</div>' +
-          '<div class="field"><label>Anything else that matters to your search?</label>' +
-            '<div class="chip-grid">' +
-              chip("extra", "undocumented", "Prefer a clinic that doesn't ask about immigration status", p.undocumented) +
-              chip("extra", "lgbtq", "Prefer LGBTQ+ affirming care", p.lgbtq) +
-            '</div>' +
-          '</div>' +
-          '<div class="form-actions">' +
-            '<button type="button" class="btn-text" id="backStep1">← Back</button>' +
-            '<button type="submit" class="btn btn-primary">Find my matches →</button>' +
-          '</div>' +
-        '</form>' +
+      '<div class="card screen">' +
+        progressDots(1) +
+        '<div class="step-head"><h2>' + t("step2Title") + '</h2><p>' + t("step2Sub") + '</p></div>' +
+        checkArea +
+        (hasRealTurnstile ? '<div class="verify-note"><span>' + t("tsNote") + '</span></div>' : '') +
+        '<div class="form-actions"><button type="button" class="btn-text" id="backStep1">' + t("backBtn") + '</button><button type="button" class="btn btn-primary" id="toResultsBtn" ' + (!verified ? "disabled" : "") + '>' + t("seeMatchesBtn") + '</button></div>' +
+      '</div>';
+  }
+
+  function renderFilters() {
+    var f = state.filters;
+    var activeN = ["interpreter", "transport", "walkIn", "hiv", "veteran", "undoc", "lgbtq"].filter(function (k) { return f[k]; }).length;
+
+    if (!state.filtersOpen) {
+      return '' +
+        '<button type="button" class="filter-teaser" id="filterTeaser">' +
+          '<span class="teaser-text">' + (activeN > 0 ? t("teaserSummary").replace("{n}", activeN) : t("teaserBody")) + '</span>' +
+          '<span class="teaser-btn">' + t("teaserBtn") + ' <span class="chevron">›</span></span>' +
+        '</button>';
+    }
+
+    var langOptions = LANGUAGES.filter(function (l) { return l !== "English"; }).map(function (l) {
+      return '<option value="' + l + '"' + (l === f.language ? " selected" : "") + '>' + STR[state.lang].langNames[l] + '</option>';
+    }).join("");
+    return '' +
+      '<div class="filter-panel screen">' +
+        '<div class="filter-head">' +
+          '<div><h3>' + t("filtersTitle") + '</h3><p class="filter-sub">' + t("filtersSub") + '</p></div>' +
+          (activeN > 0 ? '<span class="active-pill">' + t("activeCount").replace("{n}", activeN) + '</span>' : "") +
+        '</div>' +
+        '<div class="toggle-group">' +
+          '<div class="group-label">' + t("groupAccess") + '</div>' +
+          toggleRow("f", "interpreter", t("fInterpreter"), f.interpreter) +
+          (f.interpreter ? '<div class="field lang-row"><label for="fLang">' + t("whichLanguage") + '</label><select id="fLang">' + langOptions + '</select></div>' : "") +
+          toggleRow("f", "transport", t("fTransport"), f.transport) +
+          toggleRow("f", "walkIn", t("fWalkIn"), f.walkIn) +
+          toggleRow("f", "undoc", t("fUndoc"), f.undoc) +
+        '</div>' +
+        '<div class="toggle-group">' +
+          '<div class="group-label">' + t("groupCare") + '</div>' +
+          toggleRow("f", "hiv", t("fHiv"), f.hiv) +
+          toggleRow("f", "veteran", t("fVeteran"), f.veteran) +
+          toggleRow("f", "lgbtq", t("fLgbtq"), f.lgbtq) +
+        '</div>' +
+        '<button type="button" class="btn-text" id="filterCollapse" style="align-self:flex-end;">' + t("filtersDone") + '</button>' +
       '</div>';
   }
 
   function renderResults() {
-    var matches = state.lastMatches;
-    var cards = matches.map(function (m) {
-      var tier = tierFor(m.score);
-      var c = m.clinic;
+    var lang = state.lang;
+    var cards = state.matches.map(function (m) {
+      var tier = tierFor(m.score), c = m.clinic;
+      var docs = (lang === "es" ? c.docs_es : c.docs_en) || [];
+      var services = (lang === "es" ? c.services_es : c.services_en) || [];
+      var hasDetails = docs.length > 0 || services.length > 0;
       return '' +
-        '<div class="result-card">' +
+        '<div class="result-card tier-' + tier.cls + '">' +
           '<div class="result-top">' +
-            '<div><h3>' + c.name + '</h3><div class="meta">' + c.neighborhood + (c.phone ? ' · ' + c.phone : '') + '</div></div>' +
+            '<div><h3>' + esc(c.name) + '</h3><div class="meta">' + esc(c.neighborhood) + (c.phone ? ' · ' + esc(c.phone) : '') + '</div></div>' +
             '<span class="badge ' + tier.cls + '">' + tier.label + '</span>' +
           '</div>' +
-          '<ul class="reasons">' + m.reasons.map(function (r) { return "<li>" + r + "</li>"; }).join("") + '</ul>' +
-          '<div class="result-actions">' + (c.phone ? '<a class="btn btn-ghost" href="tel:' + c.phone.replace(/[^0-9+]/g, '') + '">Call clinic</a>' : '') + (c.website ? '<a class="btn btn-ghost" href="' + c.website + '" target="_blank" rel="noopener">Visit website</a>' : '') + '</div>' +
+          '<ul class="reasons">' + m.reasons.slice(0, 3).map(function (r) { return "<li>" + esc(r) + "</li>"; }).join("") + '</ul>' +
+          (hasDetails ? '' +
+            '<button type="button" class="details-toggle" data-details="' + c.id + '">' + t("detailsMore") + ' <span class="chevron">▾</span></button>' +
+            '<div class="details-panel" id="details-' + c.id + '" hidden>' +
+              (docs.length ? '<div class="detail-block"><div class="detail-label">' + t("docsLabel") + '</div><ul class="tag-list">' + docs.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join("") + '</ul></div>' : '') +
+              (services.length ? '<div class="detail-block"><div class="detail-label">' + t("servicesLabel") + '</div><div class="tag-chips">' + services.map(function (s) { return '<span class="tag-chip">' + esc(s) + '</span>'; }).join("") + '</div></div>' : '') +
+            '</div>'
+          : '') +
+          '<div class="result-actions">' +
+            (c.phone ? '<a class="btn btn-ghost" href="tel:' + esc(c.phone.replace(/[^0-9+]/g, '')) + '">' + t("callBtn") + '</a>' : '') +
+            (c.website ? '<a class="btn btn-ghost" href="' + esc(c.website) + '" target="_blank" rel="noopener">' + t("websiteBtn") + '</a>' : '') +
+          '</div>' +
         '</div>';
-    }).join("");
-
-    if (matches.length === 0) {
-      cards = '<p class="empty-note">No clinics fit those specifics yet. As Marlo adds more clinics, check back — or call 211 for immediate help finding care.</p>';
-    }
+    }).join("") || '<p class="empty-note full-span">' + t("noMatches") + '</p>';
 
     return '' +
-      '<div class="list-block">' +
-        '<div class="results-head">' +
-          '<h2 style="font-size:1.3rem;">Clinics that fit, ' + (state.patient.name || "there") + '</h2>' +
-          '<p>Ranked by how well they match what you told us — not just distance.</p>' +
-        '</div>' +
-        cards +
-        '<div><button class="btn-text" id="startOverBtn">Start a new search</button></div>' +
+      '<div class="results-wrap screen">' +
+        '<div class="results-head"><h2 style="font-size:1.7rem;">' + t("resultsTitle") + '</h2><p style="font-size:1.05rem;">' + t("resultsSub").replace("{zip}", esc(state.patient.zip)) + '</p></div>' +
+        renderFilters() +
+        '<div class="list-block">' + cards + '</div>' +
+        '<div><button class="btn-text" id="startOverBtn">' + t("startOverBtn") + '</button></div>' +
       '</div>';
   }
 
+  // ---------- Render / bind ----------
+
   function render() {
+    document.getElementById("footerText").innerHTML = t("footer") + '<br><a href="admin.html">' + t("footerLink") + '</a>';
+    document.getElementById("langToggle").querySelectorAll("button").forEach(function (b) {
+      b.classList.toggle("active", b.dataset.lang === state.lang);
+    });
+    document.querySelector(".topbar .brand").classList.toggle("is-hidden", state.step === "landing");
+    document.getElementById("wrap").classList.toggle("wide", state.step === "results");
+
     var app = document.getElementById("app");
-    var html = "";
-    if (state.step === "loading") html = '<p class="loading-note">Loading nearby clinics…</p>';
-    else if (state.step === "landing") html = renderLanding();
-    else if (state.step === "step1") html = renderStep1();
-    else if (state.step === "step2") html = renderStep2();
-    else if (state.step === "results") html = renderResults();
-    app.innerHTML = html;
+    if (state.step === "loading") app.innerHTML = '<p class="loading-note">' + (state.lang === "en" ? "Loading nearby clinics…" : "Cargando clínicas cercanas…") + '</p>';
+    else if (state.step === "landing") app.innerHTML = renderLanding();
+    else if (state.step === "step1") app.innerHTML = renderStep1();
+    else if (state.step === "step2") { app.innerHTML = renderStep2(); mountTurnstile(); }
+    else if (state.step === "results") { state.matches = matchClinics(); app.innerHTML = renderResults(); }
     bind();
   }
 
+  function mountTurnstile() {
+    var hasRealTurnstile = typeof TURNSTILE_SITE_KEY === "string" && TURNSTILE_SITE_KEY.indexOf("REPLACE_WITH") !== 0;
+    if (!hasRealTurnstile) return;
+    var el = document.getElementById("turnstileWidget");
+    if (!el) return;
+
+    var attempts = 0;
+    (function tryRender() {
+      if (window.turnstile) {
+        window.turnstile.render(el, {
+          sitekey: TURNSTILE_SITE_KEY,
+          theme: "auto",
+          callback: function (token) { verifyTurnstileToken(token); },
+          "error-callback": function () { state.ts = "failed"; render(); },
+          "expired-callback": function () { state.ts = "idle"; state.tsToken = null; render(); }
+        });
+      } else if (attempts < 50) {
+        attempts++;
+        setTimeout(tryRender, 100);
+      }
+    })();
+  }
+
+  async function verifyTurnstileToken(token) {
+    state.ts = "checking";
+    render();
+    try {
+      var res = await fetch("/api/verify-turnstile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: token })
+      });
+      var data = await res.json();
+      if (data && data.success) {
+        state.ts = "verified";
+        state.tsToken = token;
+      } else {
+        state.ts = "failed";
+        state.tsToken = null;
+        if (window.turnstile) window.turnstile.reset();
+      }
+    } catch (e) {
+      console.error("Turnstile verification request failed:", e);
+      state.ts = "failed";
+      state.tsToken = null;
+    }
+    render();
+  }
+
   function bind() {
+    document.getElementById("langToggle").querySelectorAll("button").forEach(function (b) {
+      b.onclick = function () { state.lang = b.dataset.lang; render(); };
+    });
+
     if (state.step === "landing") {
       document.getElementById("startBtn").onclick = function () { state.step = "step1"; render(); };
     }
+
     if (state.step === "step1") {
       document.getElementById("backLanding").onclick = function () { state.step = "landing"; render(); };
       document.getElementById("step1Form").onsubmit = function (e) {
@@ -224,64 +406,124 @@
         state.patient.phone = document.getElementById("pPhone").value.trim();
         state.patient.age = document.getElementById("pAge").value;
         state.patient.zip = document.getElementById("pZip").value.trim();
+        state.patient.insuranceIdx = Number(document.getElementById("insSelect").value);
+        state.ts = "idle";
+        state.tsToken = null;
         state.step = "step2";
         render();
       };
     }
+
     if (state.step === "step2") {
       document.getElementById("backStep1").onclick = function () { state.step = "step1"; render(); };
-      document.getElementById("step2Form").onsubmit = function (e) {
-        e.preventDefault();
-        var p = state.patient;
-        p.language = document.getElementById("pLang").value;
-        p.insurance = document.getElementById("pIns").value;
-        var carEl = document.querySelector('input[name="car"]:checked');
-        var walkEl = document.querySelector('input[name="walkin"]:checked');
-        p.hasCar = carEl ? carEl.value === "yes" : null;
-        p.needsWalkIn = walkEl ? walkEl.value === "yes" : null;
-        p.undocumented = !!document.querySelector('input[value="undocumented"]:checked');
-        p.lgbtq = !!document.querySelector('input[value="lgbtq"]:checked');
-        state.lastMatches = matchClinics();
-        state.step = "results";
-        render();
-        recordSubmission();
+      var hasRealTurnstile = typeof TURNSTILE_SITE_KEY === "string" && TURNSTILE_SITE_KEY.indexOf("REPLACE_WITH") !== 0;
+      if (!hasRealTurnstile) {
+        var tsBox = document.getElementById("tsBox");
+        var trigger = function () {
+          if (state.ts !== "idle") return;
+          state.ts = "checking"; render();
+          setTimeout(function () { state.ts = "verified"; render(); }, 900);
+        };
+        tsBox.onclick = trigger;
+        tsBox.onkeydown = function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); trigger(); } };
+      }
+      var toResults = document.getElementById("toResultsBtn");
+      toResults.onclick = function () {
+        if (state.ts === "verified") {
+          state.step = "results";
+          render();
+          recordSubmission();
+        }
       };
     }
+
     if (state.step === "results") {
+      var teaser = document.getElementById("filterTeaser");
+      if (teaser) teaser.onclick = function () { state.filtersOpen = true; render(); };
+      var collapse = document.getElementById("filterCollapse");
+      if (collapse) collapse.onclick = function () { state.filtersOpen = false; render(); };
+      document.querySelectorAll('input[name="f"]').forEach(function (inp) {
+        inp.onchange = function () { state.filters[inp.value] = inp.checked; render(); };
+      });
+      var langSel = document.getElementById("fLang");
+      if (langSel) langSel.onchange = function () { state.filters.language = langSel.value; render(); };
+      document.querySelectorAll(".details-toggle").forEach(function (btn) {
+        btn.onclick = function () {
+          var panel = document.getElementById("details-" + btn.dataset.details);
+          var willOpen = panel.hidden;
+          panel.hidden = !willOpen;
+          btn.classList.toggle("open", willOpen);
+          btn.childNodes[0].nodeValue = (willOpen ? t("detailsLess") : t("detailsMore")) + " ";
+        };
+      });
       var startOver = document.getElementById("startOverBtn");
-      if (startOver) startOver.onclick = function () { state.step = "landing"; render(); };
+      if (startOver) {
+        startOver.onclick = function () {
+          state.patient = { name: "", phone: "", age: "", insuranceIdx: -1, zip: "" };
+          state.ts = "idle"; state.tsToken = null;
+          state.step = "landing";
+          render();
+        };
+      }
     }
   }
 
+  // ---------- Data ----------
+
   function recordSubmission() {
     if (!supabase) return;
-    var p = state.patient;
+    var p = state.patient, f = state.filters;
     supabase.from("patient_submissions").insert({
       name: p.name, phone: p.phone, age: p.age ? Number(p.age) : null, zip_code: p.zip || null,
-      language: p.language, insurance: p.insurance, has_car: p.hasCar, needs_walk_in: p.needsWalkIn,
-      undocumented_pref: p.undocumented, lgbtq_pref: p.lgbtq,
-      matched_clinic_ids: state.lastMatches.map(function (m) { return m.clinic.id; })
+      language: state.lang === "es" ? "Spanish" : "English",
+      insurance: p.insuranceIdx >= 0 ? STR.en.ins[p.insuranceIdx] : null,
+      has_car: f.transport ? false : null,
+      needs_walk_in: f.walkIn || null,
+      needs_interpreter: f.interpreter || false,
+      interpreter_language: f.interpreter ? f.language : null,
+      undocumented_pref: f.undoc || false,
+      lgbtq_pref: f.lgbtq || false,
+      hiv_pref: f.hiv || false,
+      veteran_pref: f.veteran || false,
+      followup_status: "new",
+      matched_clinic_ids: state.matches.slice(0, 8).map(function (m) { return m.clinic.id; })
     }).then(function (res) {
-      if (res.error) console.error("Could not record submission:", res.error.message);
+      if (res.error) console.error("Could not record submission:", res.error.message, res.error);
     });
+  }
+
+  function showLoadError(title, body) {
+    var box = document.getElementById("loadError");
+    document.getElementById("loadErrorTitle").textContent = title;
+    document.getElementById("loadErrorBody").textContent = body;
+    box.style.display = "flex";
   }
 
   async function loadClinics() {
     if (!supabase) {
-      document.getElementById("loadError").style.display = "flex";
-      return;
-    }
-    var res = await supabase.from("clinics").select("*").eq("active", true).order("name");
-    if (res.error) {
-      console.error("Could not load clinics:", res.error.message);
-      document.getElementById("loadError").style.display = "flex";
-      state.step = "landing"; // show the page anyway with 0 clinics rather than stalling
+      showLoadError(t("loadErrorTitle"), t("loadErrorBody"));
+      state.step = "landing";
       render();
       return;
     }
-    state.clinics = res.data || [];
-    state.step = "landing";
-    render();
+    try {
+      var res = await supabase.from("clinics").select("*").eq("active", true).order("name");
+      if (res.error) {
+        console.error("Could not load clinics:", res.error.message, res.error);
+        showLoadError(t("loadErrorTitle"), t("loadErrorBody"));
+        state.step = "landing";
+        render();
+        return;
+      }
+      state.clinics = res.data || [];
+      state.step = "landing";
+      render();
+    } catch (e) {
+      console.error("Unexpected error loading clinics:", e);
+      showLoadError(t("loadErrorTitle"), t("loadErrorBody"));
+      state.step = "landing";
+      render();
+    }
   }
 
   loadClinics();

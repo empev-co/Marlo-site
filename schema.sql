@@ -1,5 +1,8 @@
 -- Marlo (seekmarlo.com) — Supabase database schema
 -- Run this once in Supabase: open your project -> SQL Editor -> New query -> paste this whole file -> Run.
+--
+-- If you already ran an earlier version of this file, don't re-run this one —
+-- use migration_v2.sql instead, which only adds what's new.
 
 create extension if not exists "pgcrypto";
 
@@ -22,6 +25,12 @@ create table if not exists clinics (
   lgbtq_affirming boolean not null default false,
   walk_in boolean not null default false,
   near_transit boolean not null default false,
+  hiv_care boolean not null default false,
+  veteran_friendly boolean not null default false,
+  docs_en text[] not null default '{}',                 -- what a patient needs to bring (English)
+  docs_es text[] not null default '{}',                 -- what a patient needs to bring (Spanish)
+  services_en text[] not null default '{}',             -- care provided (English)
+  services_es text[] not null default '{}',             -- care provided (Spanish)
   active boolean not null default true,                 -- uncheck instead of deleting to hide a clinic temporarily
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
@@ -40,9 +49,16 @@ create table if not exists patient_submissions (
   insurance text,
   has_car boolean,
   needs_walk_in boolean,
+  needs_interpreter boolean not null default false,
+  interpreter_language text,
   undocumented_pref boolean not null default false,
   lgbtq_pref boolean not null default false,
+  hiv_pref boolean not null default false,
+  veteran_pref boolean not null default false,
   matched_clinic_ids uuid[] default '{}',
+  followup_status text not null default 'new'
+    check (followup_status in ('new', 'contacted', 'appointment_scheduled', 'completed', 'no_response')),
+  followup_notes text,                    -- e.g. how the appointment/clinic actually went
   created_at timestamptz not null default now()
 );
 
@@ -79,6 +95,13 @@ create policy "Admin reads submissions"
   to authenticated
   using (true);
 
+-- Only a signed-in admin (you) can update follow-up status/notes on submissions.
+create policy "Admin updates submissions"
+  on patient_submissions for update
+  to authenticated
+  using (true)
+  with check (true);
+
 -- Keep updated_at accurate automatically.
 create or replace function set_updated_at()
 returns trigger as $$
@@ -98,7 +121,7 @@ create trigger clinics_updated_at
 -- before you load your real ~30 SF clinics. Delete or edit it
 -- from the admin page once you've tested.
 -- ============================================================
-insert into clinics (name, neighborhood, phone, languages, insurance, sliding_scale, population, serves_undocumented, lgbtq_affirming, walk_in, near_transit)
+insert into clinics (name, neighborhood, phone, languages, insurance, sliding_scale, population, serves_undocumented, lgbtq_affirming, walk_in, near_transit, hiv_care, veteran_friendly, docs_en, docs_es, services_en, services_es)
 values (
   'Test Clinic — replace or delete me',
   'Mission District',
@@ -110,5 +133,11 @@ values (
   true,
   false,
   true,
-  true
+  true,
+  false,
+  false,
+  array['No ID required', 'No proof of income required'],
+  array['No se requiere identificación', 'No se requiere comprobante de ingresos'],
+  array['Primary care', 'Vaccinations'],
+  array['Atención primaria', 'Vacunas']
 );
