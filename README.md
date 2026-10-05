@@ -5,6 +5,18 @@ Follow these in order. Nothing here requires coding — just following steps.
 > **Already live and adding the September redesign?** Skip to
 > [Part 8 — Updating an already-live site](#part-8--updating-an-already-live-site-yellow-redesign--turnstile--follow-ups)
 > near the bottom. Parts 1–7 below are the original from-scratch setup.
+>
+> **Already on the September redesign and adding "type of care" (dental,
+> vision, wound care, mobile clinics, etc.)?** Skip to
+> [Part 9 — Adding "type of care"](#part-9--adding-type-of-care-dental-vision-wound-care-mobile-clinics-etc).
+>
+> **Already added "type of care" and now narrowing to uninsured/underinsured,
+> dropping name/phone collection, and adding click tracking + the Insights
+> tab?** Skip to
+> [Part 10 — Anonymous search tracking and the Insights tab](#part-10--anonymous-search-tracking-and-the-insights-tab).
+>
+> **Short on time and haven't called clinics yet?** [Part 10e](#10e-havent-called-clinics-yet-load-them-in-bulk-instead)
+> loads all 41 from your outreach tracker in one paste, no calls required first.
 
 ## Part 1 — Set up the database (Supabase)
 
@@ -101,8 +113,74 @@ Until you do this, the site keeps working exactly as it does today — it just s
 
 ### 8d. Using the new "Patient follow-ups" tab
 
+> **Retired as of Part 10.** This tab depended on collecting a patient's name and phone number so you could call them back. As of Part 10 below, Marlo doesn't collect either — searches are anonymous — so this tab was replaced with an **Insights** tab instead. This section is left here for history.
+
 On `admin.html`, next to "Clinics" you'll now see a **Patient follow-ups** tab — every search a patient runs shows up there (name, phone, what they were looking for, and which clinics they were matched to), most recent first. When you check in with someone, set their **Status** (New / Contacted / Appointment scheduled / Completed / No response) and jot a note (e.g. "got in on 9/20, said the wait was short"), then click **Save**. This is exactly the continuity/follow-up tracking you asked about.
 
 ### 8e. Using the new clinic fields
 
 When adding or editing a clinic, you'll now see two new toggle chips ("Offers HIV-related care", "Experienced with veteran care") and four new boxes: "What to bring" and "Care provided," each in English and Spanish, one item per line (e.g. `No ID required` on its own line, then `No proof of income required` on the next). These show up on the results page as an optional "See documents & services" expand per clinic — nothing shows if you leave them blank.
+
+## Part 9 — Adding "type of care" (dental, vision, wound care, mobile clinics, etc.)
+
+This update adds a "What kind of care do you need?" question to the very start of the patient flow, so Marlo can list dental clinics, vision/eye care, mental health, reproductive health, wound care, mobile clinics, and pediatric care — not just general primary care — without mixing them all together in results.
+
+### 9a. Get the updated files onto GitHub
+
+Same as before: replace `main.js`, `admin.js`, `schema.sql`, and add the new `migration_v3.sql` file to your `Marlo-site` GitHub repo. Cloudflare Pages redeploys automatically within about a minute of the commit landing.
+
+### 9b. Run the database migration
+
+1. Supabase dashboard → your project → **SQL Editor** → **New query**.
+2. Open `migration_v3.sql`, copy its entire contents, paste in, click **Run**.
+3. You should see "Success. No rows returned." This works whether or not you've already run `migration_v2.sql` — run that one too if you haven't yet (see Part 8b).
+
+### 9c. Tagging your clinics with the right type(s) of care
+
+On `admin.html`, when you add or edit a clinic, you'll now see a **"Type(s) of care offered"** row of checkboxes near the top of the form — Primary / general medical care, Dental, Vision / eye care, Mental health / counseling, Reproductive & sexual health, Wound care, Mobile clinic, Pediatric care. Check every type that clinic actually offers (most will just be "Primary / general medical care," and some FQHCs offer several — e.g. primary care *and* dental).
+
+**Important:** any clinic you leave unchecked is treated as "Primary / general medical care" automatically, so nothing you've already entered disappears from search results. But it also means a clinic that actually does offer dental, for example, won't show up when a patient specifically searches for dental care until you go back and check that box. Worth a quick pass through your existing clinics once this is live.
+
+### 9d. Listing a mobile clinic (no fixed address)
+
+Address is already optional. For a mobile clinic or street medicine program, leave **Address** blank, check the **Mobile clinic (comes to you)** box under "Type(s) of care offered," and use the **"Care provided"** box to describe its schedule or route in plain language (e.g. `Parks near 16th & Mission St, Tue/Thu 10am-1pm — call ahead to confirm`).
+
+## Part 10 — Anonymous search tracking and the Insights tab
+
+This update does three things: narrows Marlo's insurance dropdown to match its focus on uninsured/underinsured patients, stops collecting a patient's name and phone number entirely, and adds click tracking plus a new **Insights** tab so you have real numbers — searches, clicks, and follow-through rate — broken down by clinic and by type of patient. This is the data you'd eventually show or sell to a clinic.
+
+### 10a. Get the updated files onto GitHub
+
+Replace `main.js`, `admin.js`, `schema.sql`, `styles.css`, and add the new `migration_v4.sql` file to your `Marlo-site` GitHub repo. Cloudflare Pages redeploys automatically within about a minute of the commit landing.
+
+### 10b. Run the database migration
+
+1. Supabase dashboard → your project → **SQL Editor** → **New query**.
+2. Open `migration_v4.sql`, copy its entire contents, paste in, click **Run**.
+3. You should see "Success. No rows returned." This is independent of `migration_v2.sql` and `migration_v3.sql` — run whichever of those you haven't yet, in any order.
+
+### 10c. What changed for patients
+
+The insurance question now only offers **Uninsured / no coverage**, **Medicaid (Medi-Cal)**, **Medicare**, and **Not sure / other** — "Private insurance or marketplace plan" was removed, since Marlo is meant for people who don't already have easy access through solid private coverage. The intake form no longer asks for name or phone at all — just what kind of care, age, insurance status, and zip code. Existing rows from before this update that do have a name/phone are untouched; nothing was deleted automatically. If you want a fully clean, anonymous history, you can clear those two columns yourself from the Supabase Table Editor (`patient_submissions` table) — that's your call, not something this update does on its own.
+
+### 10d. Using the new "Insights" tab
+
+On `admin.html`, "Patient follow-ups" is gone — replaced by **Insights**. It shows:
+
+- **Overview**: total searches, total clinic clicks (call + website combined), and what share of searches led to a click.
+- **By clinic**: for each clinic — how many searches it was matched in, how many calls, how many website visits, and a "followed through" rate (clicks ÷ matches). Click **See profile** on any clinic to expand a full breakdown of just that clinic's matched searches: language, insurance status, and how many needed an interpreter, needed transportation, wanted walk-in, or asked about immigration-status safety / LGBTQ+ care / HIV care / veteran care — each as a percentage, plus its top zip codes. This is the exact "clinic X matched 20 searches, 15% were Cantonese-speaking, 40% needed transportation" kind of number you'd hand to that clinic.
+- **By type of care searched / by insurance status / by language**: how many searches and clicks came from each, site-wide, so you can see things like "most Spanish-language searches are for dental care" at a glance.
+
+A "click" is logged the moment a patient taps **Call clinic** or **Visit website** on a match — nothing is shared with any clinic automatically; this tab is for your own eyes until you decide to package and share it.
+
+### 10e. Haven't called clinics yet? Load them in bulk instead
+
+If outreach calls haven't happened yet and you don't want that to block launch, `load_clinics_from_tracker.sql` loads all 41 clinics from your outreach tracker in one paste — name, address, phone, website, and type(s) of care, all already-researched info.
+
+1. Run this only after `schema.sql` and `migration_v3.sql` (it needs the `care_types` column).
+2. Supabase dashboard → **SQL Editor** → **New query** → paste the entire contents of `load_clinics_from_tracker.sql` → **Run**.
+3. All 41 clinics now show up in `admin.html` → **Clinics**, and in search results on the live site.
+
+It deliberately leaves insurance accepted, sliding-scale, walk-in, languages, and the rest at their defaults — those are exactly what the outreach call or email confirms, so there's no guessing about something that could misdirect a patient. Go back into each clinic's edit form in `admin.html` and fill those in as you actually talk to each clinic — the call becomes a data-accuracy check on top of the partnership ask, not a gate blocking the site from going live.
+
+Only run it once — clinic names aren't enforced unique, so running it twice creates duplicates. If you ever need to re-run it, delete that batch first from `admin.html`.

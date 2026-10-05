@@ -88,8 +88,6 @@ a { color: var(--ink); }
   border-bottom: 3px dashed var(--accent); padding-bottom: 5px;
 }
 
-.trust-line { font-size: 0.94rem; color: var(--ink-soft); margin-top: 2px; }
-
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   border-radius: 14px; padding: 17px 34px; font-weight: 700; font-size: 1.1rem;
@@ -251,3 +249,9 @@ footer a { color: var(--ink-soft); }
 .center-card { max-width: 420px; margin: 60px auto; }
 
 .diag-line { font-size: 0.72rem; color: var(--ink-soft); text-align: center; padding-top: 4px; }
+
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 620px) { .stat-grid { grid-template-columns: 1fr; } }
+.stat-tile { background: var(--surface-2); border: 1.5px solid var(--line); border-radius: 14px; padding: 18px; text-align: center; }
+.stat-value { font-family: "Libre Franklin", sans-serif; font-weight: 800; font-size: 1.9rem; color: var(--accent-dark); }
+.stat-label { font-size: 0.8rem; color: var(--ink-soft); margin-top: 4px; }

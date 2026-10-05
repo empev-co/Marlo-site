@@ -9,12 +9,11 @@
       heroPre: "Find a clinic that will ", heroEm: "actually", heroPost: " see you.",
       startBtn: "Get Started",
       step1Title: "Tell us about the person who needs care", step1Sub: "This can be you, or someone you're helping.",
-      nameLabel: "Name", namePh: "Full name",
-      phoneLabel: "Phone number", phonePh: "(415) 555-0100",
-      phoneHint: "So we can follow up and see how it went — never shared with clinics without your OK.",
+      careLabel: "What kind of care do you need?", carePh: "Select one",
+      care: ["Primary / general medical care", "Dental", "Vision / eye care", "Mental health / counseling", "Reproductive & sexual health", "Wound care", "Mobile clinic (comes to you)", "Pediatric care"],
       ageLabel: "Patient's age", agePh: "Insert here", zipLabel: "Patient's zip code", zipPh: "Insert here",
       insLabel: "Patient's insurance status", insPh: "Select one",
-      ins: ["Uninsured / no coverage", "Medicaid (called Medi-Cal in California)", "Medicare", "Private insurance or marketplace plan", "Not sure / other"],
+      ins: ["Uninsured / no coverage", "Medicaid (called Medi-Cal in California)", "Medicare", "Not sure / other"],
       backBtn: "← Back", getClinicsBtn: "Continue",
       step2Title: "One quick step", step2Sub: "We just need to confirm you're a real person — this keeps Marlo working well for everyone searching.",
       tsIdle: "I'm not a robot", tsChecking: "Checking", tsVerified: "Verified — you're all set", tsFailed: "Couldn't verify — please try again",
@@ -49,12 +48,11 @@
       heroPre: "Encuentra una clínica que ", heroEm: "de verdad", heroPost: " te atienda.",
       startBtn: "Comenzar",
       step1Title: "Cuéntenos sobre la persona que necesita atención", step1Sub: "Puede ser usted, o alguien a quien está ayudando.",
-      nameLabel: "Nombre", namePh: "Nombre completo",
-      phoneLabel: "Número de teléfono", phonePh: "(415) 555-0100",
-      phoneHint: "Para poder darle seguimiento y saber cómo le fue — nunca se comparte con las clínicas sin su permiso.",
+      careLabel: "¿Qué tipo de atención necesita?", carePh: "Seleccione uno",
+      care: ["Atención médica general", "Dental", "Visión / cuidado de los ojos", "Salud mental / consejería", "Salud reproductiva y sexual", "Cuidado de heridas", "Clínica móvil (viene a usted)", "Atención pediátrica"],
       ageLabel: "Edad del paciente", agePh: "Escriba aquí", zipLabel: "Código postal del paciente", zipPh: "Escriba aquí",
       insLabel: "Estado del seguro médico", insPh: "Seleccione uno",
-      ins: ["Sin seguro médico", "Medicaid (llamado Medi-Cal en California)", "Medicare", "Seguro privado o plan del mercado", "No estoy seguro/a / otro"],
+      ins: ["Sin seguro médico", "Medicaid (llamado Medi-Cal en California)", "Medicare", "No estoy seguro/a / otro"],
       backBtn: "← Atrás", getClinicsBtn: "Continuar",
       step2Title: "Un paso rápido", step2Sub: "Solo necesitamos confirmar que es una persona real — esto ayuda a que Marlo funcione bien para todos.",
       tsIdle: "No soy un robot", tsChecking: "Verificando", tsVerified: "Verificado — todo listo", tsFailed: "No se pudo verificar — intente de nuevo",
@@ -99,7 +97,7 @@
     lang: "en",
     step: "loading", // loading | landing | step1 | step2 | results
     clinics: [],
-    patient: { name: "", phone: "", age: "", insuranceIdx: -1, zip: "" },
+    patient: { age: "", careIdx: -1, insuranceIdx: -1, zip: "" },
     ts: "idle", // idle | checking | verified | failed
     tsToken: null,
     filters: { interpreter: false, language: "Spanish", transport: false, walkIn: false, hiv: false, veteran: false, undoc: false, lgbtq: false },
@@ -137,6 +135,12 @@
   function scoreClinic(c, p, f) {
     if (c.population === "pediatric" && p.age !== "" && Number(p.age) >= 18) return null;
     if (c.population === "adult" && p.age !== "" && Number(p.age) < 18) return null;
+
+    // Clinics added before the "type of care" field existed have no care_types set —
+    // treat those as primary/general care rather than hiding them from every search.
+    var careTypes = (c.care_types && c.care_types.length) ? c.care_types : [STR.en.care[0]];
+    var careLabel = p.careIdx >= 0 ? STR.en.care[p.careIdx] : "";
+    if (careLabel && careTypes.indexOf(careLabel) === -1) return null;
 
     var score = 0, reasons = [];
     var insurance = c.insurance || [];
@@ -194,6 +198,8 @@
 
   function renderStep1() {
     var p = state.patient;
+    var careOptions = '<option value="-1" disabled' + (p.careIdx === -1 ? " selected" : "") + '>' + t("carePh") + '</option>' +
+      STR[state.lang].care.map(function (label, i) { return '<option value="' + i + '"' + (p.careIdx === i ? " selected" : "") + '>' + label + '</option>'; }).join("");
     var insOptions = '<option value="-1" disabled' + (p.insuranceIdx === -1 ? " selected" : "") + '>' + t("insPh") + '</option>' +
       STR[state.lang].ins.map(function (label, i) { return '<option value="' + i + '"' + (p.insuranceIdx === i ? " selected" : "") + '>' + label + '</option>'; }).join("");
     return '' +
@@ -201,11 +207,7 @@
         progressDots(0) +
         '<div class="step-head"><h2>' + t("step1Title") + '</h2><p>' + t("step1Sub") + '</p></div>' +
         '<form id="step1Form">' +
-          '<div class="two-col">' +
-            '<div class="field"><label for="pName">' + t("nameLabel") + '</label><input type="text" id="pName" value="' + esc(p.name) + '" placeholder="' + t("namePh") + '" required></div>' +
-            '<div class="field"><label for="pPhone">' + t("phoneLabel") + '</label><input type="tel" id="pPhone" value="' + esc(p.phone) + '" placeholder="' + t("phonePh") + '" required></div>' +
-          '</div>' +
-          '<p class="hint" style="margin-top:-12px;margin-bottom:20px;">' + t("phoneHint") + '</p>' +
+          '<div class="field"><label for="careSelect">' + t("careLabel") + '</label><select id="careSelect" required>' + careOptions + '</select></div>' +
           '<div class="field"><label for="pAge">' + t("ageLabel") + '</label><input type="number" id="pAge" min="0" max="120" value="' + p.age + '" placeholder="' + t("agePh") + '" required></div>' +
           '<div class="field"><label for="insSelect">' + t("insLabel") + '</label><select id="insSelect" required>' + insOptions + '</select></div>' +
           '<div class="field"><label for="pZip">' + t("zipLabel") + '</label><input type="text" id="pZip" maxlength="5" pattern="[0-9]{5}" value="' + esc(p.zip) + '" placeholder="' + t("zipPh") + '" required></div>' +
@@ -303,8 +305,8 @@
             '</div>'
           : '') +
           '<div class="result-actions">' +
-            (c.phone ? '<a class="btn btn-ghost" href="tel:' + esc(c.phone.replace(/[^0-9+]/g, '')) + '">' + t("callBtn") + '</a>' : '') +
-            (c.website ? '<a class="btn btn-ghost" href="' + esc(c.website) + '" target="_blank" rel="noopener">' + t("websiteBtn") + '</a>' : '') +
+            (c.phone ? '<a class="btn btn-ghost" data-click-clinic="' + c.id + '" data-click-action="call" href="tel:' + esc(c.phone.replace(/[^0-9+]/g, '')) + '">' + t("callBtn") + '</a>' : '') +
+            (c.website ? '<a class="btn btn-ghost" data-click-clinic="' + c.id + '" data-click-action="website" href="' + esc(c.website) + '" target="_blank" rel="noopener">' + t("websiteBtn") + '</a>' : '') +
           '</div>' +
         '</div>';
     }).join("") || '<p class="empty-note full-span">' + t("noMatches") + '</p>';
@@ -399,10 +401,9 @@
       document.getElementById("backLanding").onclick = function () { state.step = "landing"; render(); };
       document.getElementById("step1Form").onsubmit = function (e) {
         e.preventDefault();
-        state.patient.name = document.getElementById("pName").value.trim();
-        state.patient.phone = document.getElementById("pPhone").value.trim();
         state.patient.age = document.getElementById("pAge").value;
         state.patient.zip = document.getElementById("pZip").value.trim();
+        state.patient.careIdx = Number(document.getElementById("careSelect").value);
         state.patient.insuranceIdx = Number(document.getElementById("insSelect").value);
         state.ts = "idle";
         state.tsToken = null;
@@ -444,6 +445,11 @@
       });
       var langSel = document.getElementById("fLang");
       if (langSel) langSel.onchange = function () { state.filters.language = langSel.value; render(); };
+      document.querySelectorAll("[data-click-clinic]").forEach(function (a) {
+        a.addEventListener("click", function () {
+          logClinicClick(a.dataset.clickClinic, a.dataset.clickAction);
+        });
+      });
       document.querySelectorAll(".details-toggle").forEach(function (btn) {
         btn.onclick = function () {
           var panel = document.getElementById("details-" + btn.dataset.details);
@@ -456,8 +462,9 @@
       var startOver = document.getElementById("startOverBtn");
       if (startOver) {
         startOver.onclick = function () {
-          state.patient = { name: "", phone: "", age: "", insuranceIdx: -1, zip: "" };
+          state.patient = { age: "", careIdx: -1, insuranceIdx: -1, zip: "" };
           state.ts = "idle"; state.tsToken = null;
+          state.lastSubmissionId = null;
           state.step = "landing";
           render();
         };
@@ -467,12 +474,28 @@
 
   // ---------- Data ----------
 
+  function uuid() {
+    if (window.crypto && typeof crypto.randomUUID === "function") return crypto.randomUUID();
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (ch) {
+      var r = (Math.random() * 16) | 0, v = ch === "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  }
+
   function recordSubmission() {
     if (!supabase) return;
     var p = state.patient, f = state.filters;
+    // Generated client-side (rather than read back after insert) so a clinic
+    // click logged a moment later can be tied to this search immediately —
+    // the public site can INSERT submissions but, on purpose, can never SELECT
+    // them back, so there's nothing to read an id from.
+    var id = uuid();
+    state.lastSubmissionId = id;
     supabase.from("patient_submissions").insert({
-      name: p.name, phone: p.phone, age: p.age ? Number(p.age) : null, zip_code: p.zip || null,
+      id: id,
+      age: p.age ? Number(p.age) : null, zip_code: p.zip || null,
       language: state.lang === "es" ? "Spanish" : "English",
+      care_type: p.careIdx >= 0 ? STR.en.care[p.careIdx] : null,
       insurance: p.insuranceIdx >= 0 ? STR.en.ins[p.insuranceIdx] : null,
       has_car: f.transport ? false : null,
       needs_walk_in: f.walkIn || null,
@@ -486,6 +509,32 @@
       matched_clinic_ids: state.matches.slice(0, 8).map(function (m) { return m.clinic.id; })
     }).then(function (res) {
       if (res.error) console.error("Could not record submission:", res.error.message, res.error);
+    });
+  }
+
+  // Logs that a patient tapped "Call clinic" or "Visit website" for a specific
+  // clinic. This is the piece that lets Emma eventually show a clinic real
+  // numbers ("38 people who needed Spanish-language dental care matched with
+  // you this month, 14 called"). Fire-and-forget — never blocks the tel:/
+  // website navigation, and never surfaces an error to the patient.
+  function logClinicClick(clinicId, action) {
+    if (!supabase || !clinicId) return;
+    var p = state.patient, f = state.filters;
+    supabase.from("clinic_clicks").insert({
+      clinic_id: clinicId,
+      submission_id: state.lastSubmissionId || null,
+      action: action,
+      care_type: p.careIdx >= 0 ? STR.en.care[p.careIdx] : null,
+      insurance: p.insuranceIdx >= 0 ? STR.en.ins[p.insuranceIdx] : null,
+      language: state.lang === "es" ? "Spanish" : "English",
+      needs_interpreter: f.interpreter || false,
+      undocumented_pref: f.undoc || false,
+      lgbtq_pref: f.lgbtq || false,
+      hiv_pref: f.hiv || false,
+      veteran_pref: f.veteran || false,
+      zip_code: p.zip || null
+    }).then(function (res) {
+      if (res.error) console.error("Could not log clinic click:", res.error.message, res.error);
     });
   }
 
