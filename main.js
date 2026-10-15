@@ -37,6 +37,7 @@
       docsLabel: "What to bring", servicesLabel: "Care provided",
       apptTitle: "Making an appointment", walkInNote: "Walk-ins welcome — no appointment needed",
       walkInChip: "Accepts walk-ins — no appointment needed",
+      childChipPediatric: "Pediatric care", childChipAll: "Accepts children",
       teaserBody: "We recommend adding this info too, for better matches.",
       teaserBtn: "Add details",
       teaserSummary: "{n} added — tap to fine-tune your matches",
@@ -78,6 +79,7 @@
       docsLabel: "Qué llevar", servicesLabel: "Atención brindada",
       apptTitle: "Cómo hacer una cita", walkInNote: "Se aceptan pacientes sin cita — no necesita hacer una cita",
       walkInChip: "Acepta pacientes sin cita previa",
+      childChipPediatric: "Atención pediátrica", childChipAll: "Atiende a niños",
       teaserBody: "Recomendamos agregar esta información también, para mejores resultados.",
       teaserBtn: "Agregar detalles",
       teaserSummary: "{n} agregados — toque para ajustar sus resultados",
@@ -302,6 +304,14 @@
       // happened to toggle — so it always shows here when true, regardless of filter state.
       var chips = [];
       if (c.walk_in) chips.push(t("walkInChip"));
+      // When the patient being searched for is a child, confirm up front (not just by the
+      // results list excluding adult-only clinics) that this clinic actually sees kids —
+      // only for clinics whose population is confirmed, never implied for "not stated".
+      var isChildSearch = state.patient.age !== "" && Number(state.patient.age) < 18;
+      if (isChildSearch) {
+        if (c.population === "pediatric") chips.push(t("childChipPediatric"));
+        else if (c.population === "all") chips.push(t("childChipAll"));
+      }
       chips = chips.concat(m.reasons);
       return '' +
         '<div class="result-card tier-' + tier.cls + '">' +
@@ -309,7 +319,7 @@
             '<div><h3>' + esc(c.name) + '</h3><div class="meta">' + esc(c.neighborhood) + (c.phone ? ' · ' + esc(c.phone) : '') + '</div></div>' +
             '<span class="badge ' + tier.cls + '">' + tier.label + '</span>' +
           '</div>' +
-          (chips.length ? '<div class="reason-chips">' + chips.slice(0, 4).map(function (r) { return '<span class="reason-chip">' + esc(r) + '</span>'; }).join("") + '</div>' : '') +
+          (chips.length ? '<div class="reason-chips">' + chips.slice(0, 5).map(function (r) { return '<span class="reason-chip">' + esc(r) + '</span>'; }).join("") + '</div>' : '') +
           (hasExpand ? '' +
             '<button type="button" class="details-toggle" data-details="' + c.id + '">' + t("detailsMore") + ' <span class="chevron">▾</span></button>' +
             '<div class="details-panel" id="details-' + c.id + '" hidden>' +
