@@ -41,7 +41,7 @@
       filtersDone: "Done",
       loadErrorTitle: "Can't reach the clinic list right now.",
       loadErrorBody: "Check your internet connection and reload the page.",
-      strong: "Strong match", good: "Good match", possible: "Possible option"
+      strong: "Best Match", good: "Good Option", possible: "Possible Option"
     },
     es: {
       bannerNote: "",
