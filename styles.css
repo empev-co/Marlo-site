@@ -187,9 +187,12 @@ a { color: var(--ink); }
 .badge.good { background: var(--surface); color: var(--accent-dark); border-color: var(--accent-dark); }
 .badge.possible { background: var(--surface-2); color: var(--ink-soft); border-color: var(--line); }
 .meta { font-size: 0.88rem; color: var(--ink-soft); }
-.reasons { list-style: none; padding: 0; margin: 2px 0 0; display: flex; flex-direction: column; gap: 6px; }
-.reasons li { font-size: 0.92rem; color: var(--ink); display: flex; gap: 8px; }
-.reasons li::before { content: "✓"; color: var(--accent-dark); font-weight: 700; }
+.reason-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.reason-chip {
+  font-size: 0.8rem; font-weight: 600; color: var(--ink-on-accent); background: var(--accent);
+  border: 1px solid var(--outline); padding: 6px 12px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px;
+}
+.reason-chip::before { content: "âœ“"; font-weight: 700; }
 
 .details-toggle {
   align-self: flex-start; background: none; border: none; cursor: pointer; padding: 2px 0;
@@ -199,7 +202,9 @@ a { color: var(--ink); }
 .details-toggle .chevron { transition: transform 0.15s; font-size: 0.75em; }
 .details-toggle.open .chevron { transform: rotate(180deg); }
 .details-panel { display: flex; flex-direction: column; gap: 14px; padding-top: 4px; border-top: 1px solid var(--line); }
+.details-panel[hidden] { display: none; }
 .detail-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft); margin-bottom: 6px; }
+.walkin-note { font-size: 0.9rem; font-weight: 700; color: var(--accent-dark); margin: 0 0 10px; }
 .tag-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
 .tag-list li { font-size: 0.9rem; color: var(--ink); }
 .tag-chips { display: flex; flex-wrap: wrap; gap: 6px; }
