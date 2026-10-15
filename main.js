@@ -33,8 +33,10 @@
       filtersSub: "Turn on what matters to you — your matches update instantly.",
       activeCount: "{n} on",
       groupAccess: "Getting there", groupCare: "Type of care",
-      detailsMore: "See documents & services", detailsLess: "Hide details",
+      detailsMore: "Contact clinic", detailsLess: "Hide",
       docsLabel: "What to bring", servicesLabel: "Care provided",
+      apptTitle: "Making an appointment", walkInNote: "Walk-ins welcome — no appointment needed",
+      walkInChip: "Accepts walk-ins — no appointment needed",
       teaserBody: "We recommend adding this info too, for better matches.",
       teaserBtn: "Add details",
       teaserSummary: "{n} added — tap to fine-tune your matches",
@@ -72,8 +74,10 @@
       filtersSub: "Active lo que le importa — sus resultados se actualizan al instante.",
       activeCount: "{n} activos",
       groupAccess: "Cómo llegar", groupCare: "Tipo de atención",
-      detailsMore: "Ver documentos y servicios", detailsLess: "Ocultar detalles",
+      detailsMore: "Contactar clínica", detailsLess: "Ocultar",
       docsLabel: "Qué llevar", servicesLabel: "Atención brindada",
+      apptTitle: "Cómo hacer una cita", walkInNote: "Se aceptan pacientes sin cita — no necesita hacer una cita",
+      walkInChip: "Acepta pacientes sin cita previa",
       teaserBody: "Recomendamos agregar esta información también, para mejores resultados.",
       teaserBtn: "Agregar detalles",
       teaserSummary: "{n} agregados — toque para ajustar sus resultados",
@@ -162,7 +166,9 @@
     }
 
     if (f.transport && c.near_transit) { score += 2; reasons.push(state.lang === "en" ? "Near public transit" : "Cerca del transporte público"); }
-    if (f.walkIn && c.walk_in) { score += 2; reasons.push(state.lang === "en" ? "Accepts walk-ins — no appointment needed" : "Acepta pacientes sin cita previa"); }
+    // Walk-in status is shown unconditionally on every card (see renderResults), not just as a
+    // reason when this filter is toggled on — so this only affects ranking, not what's displayed.
+    if (f.walkIn && c.walk_in) { score += 2; }
     if (f.hiv && c.hiv_care) { score += 3; reasons.push(state.lang === "en" ? "Offers HIV-related care" : "Ofrece atención relacionada con el VIH"); }
     if (f.veteran && c.veteran_friendly) { score += 2; reasons.push(state.lang === "en" ? "Experience coordinating veteran care" : "Experiencia con atención para veteranos"); }
     if (f.undoc && c.serves_undocumented) { score += 3; reasons.push(state.lang === "en" ? "Serves patients regardless of immigration status" : "Atiende a pacientes sin importar su estatus migratorio"); }
@@ -290,24 +296,37 @@
       var docs = (lang === "es" ? c.docs_es : c.docs_en) || [];
       var services = (lang === "es" ? c.services_es : c.services_en) || [];
       var hasDetails = docs.length > 0 || services.length > 0;
+      var hasActions = !!(c.phone || c.website);
+      var hasExpand = hasDetails || hasActions;
+      // Walk-in access is a fact about the clinic, not a reason tied to a filter the patient
+      // happened to toggle — so it always shows here when true, regardless of filter state.
+      var chips = [];
+      if (c.walk_in) chips.push(t("walkInChip"));
+      chips = chips.concat(m.reasons);
       return '' +
         '<div class="result-card tier-' + tier.cls + '">' +
           '<div class="result-top">' +
             '<div><h3>' + esc(c.name) + '</h3><div class="meta">' + esc(c.neighborhood) + (c.phone ? ' · ' + esc(c.phone) : '') + '</div></div>' +
             '<span class="badge ' + tier.cls + '">' + tier.label + '</span>' +
           '</div>' +
-          '<ul class="reasons">' + m.reasons.slice(0, 3).map(function (r) { return "<li>" + esc(r) + "</li>"; }).join("") + '</ul>' +
-          (hasDetails ? '' +
+          (chips.length ? '<div class="reason-chips">' + chips.slice(0, 4).map(function (r) { return '<span class="reason-chip">' + esc(r) + '</span>'; }).join("") + '</div>' : '') +
+          (hasExpand ? '' +
             '<button type="button" class="details-toggle" data-details="' + c.id + '">' + t("detailsMore") + ' <span class="chevron">▾</span></button>' +
             '<div class="details-panel" id="details-' + c.id + '" hidden>' +
+              (hasActions ? '' +
+                '<div class="detail-block">' +
+                  '<div class="detail-label">' + t("apptTitle") + '</div>' +
+                  (c.walk_in ? '<p class="walkin-note">✓ ' + t("walkInNote") + '</p>' : '') +
+                  '<div class="result-actions">' +
+                    (c.phone ? '<a class="btn btn-ghost" data-click-clinic="' + c.id + '" data-click-action="call" href="tel:' + esc(c.phone.replace(/[^0-9+]/g, '')) + '">' + t("callBtn") + '</a>' : '') +
+                    (c.website ? '<a class="btn btn-ghost" data-click-clinic="' + c.id + '" data-click-action="website" href="' + esc(c.website) + '" target="_blank" rel="noopener">' + t("websiteBtn") + '</a>' : '') +
+                  '</div>' +
+                '</div>'
+              : '') +
               (docs.length ? '<div class="detail-block"><div class="detail-label">' + t("docsLabel") + '</div><ul class="tag-list">' + docs.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join("") + '</ul></div>' : '') +
               (services.length ? '<div class="detail-block"><div class="detail-label">' + t("servicesLabel") + '</div><div class="tag-chips">' + services.map(function (s) { return '<span class="tag-chip">' + esc(s) + '</span>'; }).join("") + '</div></div>' : '') +
             '</div>'
           : '') +
-          '<div class="result-actions">' +
-            (c.phone ? '<a class="btn btn-ghost" data-click-clinic="' + c.id + '" data-click-action="call" href="tel:' + esc(c.phone.replace(/[^0-9+]/g, '')) + '">' + t("callBtn") + '</a>' : '') +
-            (c.website ? '<a class="btn btn-ghost" data-click-clinic="' + c.id + '" data-click-action="website" href="' + esc(c.website) + '" target="_blank" rel="noopener">' + t("websiteBtn") + '</a>' : '') +
-          '</div>' +
         '</div>';
     }).join("") || '<p class="empty-note full-span">' + t("noMatches") + '</p>';
 
