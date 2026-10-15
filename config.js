@@ -18,4 +18,4 @@ const SUPABASE_ANON_KEY = "sb_publishable_RrKSKe9xk9KokAoWLcIA2w_iStYOTUn";
 // Cloudflare dashboard -> Turnstile -> your widget -> Site Key.
 // Leave the placeholder in place and the bot-check step will just show an
 // explanatory message instead of breaking the page.
-const TURNSTILE_SITE_KEY = "REPLACE_WITH_YOUR_TURNSTILE_SITE_KEY";
+const TURNSTILE_SITE_KEY = "0x4AAAAAAFX9A4V9VNIRQFj6";
