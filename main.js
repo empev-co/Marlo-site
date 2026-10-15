@@ -326,7 +326,7 @@
               (hasActions ? '' +
                 '<div class="detail-block">' +
                   '<div class="detail-label">' + t("apptTitle") + '</div>' +
-                  (c.walk_in ? '<p class="walkin-note">✓ ' + t("walkInNote") + '</p>' : '') +
+                  (c.walk_in ? '<p class="walkin-note">\u2713 ' + t("walkInNote") + '</p>' : '') +
                   '<div class="result-actions">' +
                     (c.phone ? '<a class="btn btn-ghost" data-click-clinic="' + c.id + '" data-click-action="call" href="tel:' + esc(c.phone.replace(/[^0-9+]/g, '')) + '">' + t("callBtn") + '</a>' : '') +
                     (c.website ? '<a class="btn btn-ghost" data-click-clinic="' + c.id + '" data-click-action="website" href="' + esc(c.website) + '" target="_blank" rel="noopener">' + t("websiteBtn") + '</a>' : '') +
